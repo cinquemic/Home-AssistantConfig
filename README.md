@@ -10,6 +10,7 @@ This is my Home Assistant configuration, running on Raspberry Pi3 B.
 
 - Google Home
 - xiaomi Gateway
+- netatmo Thermostat
 - Philips Hue Bridge (3 color Light Bulbs)
 - Xiaomi Aqara temp. sensor
 - Xiaomi Aqara motion sensor
