@@ -1,3 +1,7 @@
+
+![alt text](screenshots/home.png "Home")
+
+
 ## Setup
 
 You need to set your TV to use a pre-shared key.
