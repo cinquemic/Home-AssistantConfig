@@ -1,0 +1,164 @@
+default_view:
+  view: yes
+  icon: mdi:home-assistant
+  entities:
+    - group.climate
+    - group.camere
+    - group.luci
+    - group.info
+    - group.presenze
+    - group.meteo
+    
+
+Media:
+  view: yes
+  icon: mdi:theater
+  entities:
+    - group.music_spotify
+    - media_player.spotify
+    - media_player.sony_bravia_tv
+    - media_player.htnt5_e7a5381_2
+    
+       
+Giardino:
+  view: yes
+  icon: mdi:flower
+  entities:
+    - group.irrigazione
+    - group.cancello
+    
+
+cam:
+  view: yes
+  icon: mdi:camcorder
+  entities:
+    - camera.entrata
+    - camera.cam
+    - group.ptz
+
+impostazioni:
+  view: yes
+  icon: mdi:settings
+  entities:
+    - group.devices
+    - group.speed
+    - group.automation
+    - group.ssl
+    
+luci: 
+  name: Luci
+  entities:
+    - light.hue_color_lamp_1
+    - light.hue_color_lamp_2
+    - light.hue_color_lamp_3
+    - switch.sonoff
+    - light.gateway_light_7811dcb7d33a
+  control: hidden
+
+irrigazione:
+  name: irrigazione 
+  entities:
+    - switch.irrigazione
+    - input_number.timerore
+    - switch.timer
+    - input_datetime.irrigazione
+  control: hidden
+
+cancello:
+  name: cancello
+  entities:
+    - switch.cancello
+
+devices:
+  name: Controlli
+  entities:
+    - script.restart_ha
+    - script.wol_pc
+  control: hidden
+
+info:
+  name: Info
+  entities: 
+    - switch.copy
+    - switch.robot
+    - sensor.raspberry_temp   
+    - sensor.tv_on
+    - sensor.sound_on
+    - sensor.corinne_batt
+    - sensor.michele_batt
+  control: hidden
+
+telecomando:
+  name: Telecomando
+  entities:
+    - input_text.remote
+
+automation:
+  name: Automazioni
+  control: hidden
+  entities:
+    - switch.timer
+    - switch.face_rec
+
+music_spotify:
+  name: Music 
+  entities:
+  - input_text.spotify_artist
+  - input_select.spotify_playlist
+  - input_select.spotify_source
+  - script.spotify_music
+  - input_number.spotify_volume
+
+speed:
+  name: Bandwith
+  entities:
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+    - sensor.speedtest_ping
+
+ptz:
+  name: Posizione Camera
+  control: hidden
+  entities:
+    - input_text.cam_ptz
+
+meteo:
+  name: Meteo
+  control: hidden
+  entities:
+    - input_text.weather
+
+tracks:
+  name: Family
+  entities:
+   - sensor.michele
+   - sensor.eta_michele
+   - sensor.corinne
+   - sensor.eta_corinne
+
+climate:
+  name: Controllo Temperatura
+  entities:
+    - climate.condizionatore
+    - climate.termostato
+    - switch.swing
+
+ssl:
+  name: SSL
+  entities:
+    - sensor.ssl_certificate_expiry
+    - sensor.pihole_ads_blocked_today
+    - sensor.pihole_dns_unique_clients
+
+presenze:
+  name: Presenze in casa
+  entities:
+    - sensor.face
+    - sensor.face_rec
+
+camere:
+  name: camere
+  entities:
+    - sensor.temperature_158d0002378f81
+    - sensor.humidity_158d0002378f81
+

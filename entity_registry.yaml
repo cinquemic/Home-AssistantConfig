@@ -1,0 +1,60 @@
+media_player.htnt5_e7a5381:
+  name:
+  platform: cast
+  unique_id: 04ad539f-4cd3-fa3f-696e-a27144407114
+media_player.htnt5_e7a5381_2:
+  name:
+  platform: songpal
+  unique_id: 04:5d:4b:e7:a5:38
+media_player.kd49x8309c:
+  name:
+  platform: cast
+  unique_id: 30a99d90-27c8-6b77-91fc-d6f4ec07377e
+light.hue_color_lamp_3:
+  name:
+  platform: hue
+  unique_id: 00:17:88:01:00:ed:79:53-0b
+light.hue_color_lamp_1:
+  name:
+  platform: hue
+  unique_id: 00:17:88:01:00:ed:76:9c-0b
+light.hue_color_lamp_2:
+  name:
+  platform: hue
+  unique_id: 00:17:88:01:00:ed:6f:6b-0b
+media_player.salotto:
+  name:
+  platform: cast
+  unique_id: ca451912-db73-f62f-ab3e-8480604718f2
+media_player.kd49x8309c_2:
+  name:
+  platform: cast
+  unique_id: 2bb36b9b-eb60-0f62-f960-e22c94c0088b
+media_player.kd49x8309c_3:
+  name:
+  platform: cast
+  unique_id: 25d0aff4-0cb1-df1a-91e5-5955361011e4
+binary_sensor.motion_sensor_158d0001e54883:
+  name:
+  platform: xiaomi_aqara
+  unique_id: status158d0001e54883
+sensor.illumination_158d0001e54883:
+  name:
+  platform: xiaomi_aqara
+  unique_id: lux158d0001e54883
+sensor.temperature_158d0002378f81:
+  name:
+  platform: xiaomi_aqara
+  unique_id: temperature158d0002378f81
+sensor.illumination_7811dcb7d33a:
+  name:
+  platform: xiaomi_aqara
+  unique_id: illumination7811dcb7d33a
+sensor.humidity_158d0002378f81:
+  name:
+  platform: xiaomi_aqara
+  unique_id: humidity158d0002378f81
+light.gateway_light_7811dcb7d33a:
+  name:
+  platform: xiaomi_aqara
+  unique_id: rgb7811dcb7d33a

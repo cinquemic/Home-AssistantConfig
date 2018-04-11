@@ -1,0 +1,407 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 45.8903545
+  longitude: 12.7016591
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 0
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Rome
+  # Customization file
+  customize: !include customize.yaml
+    
+
+# Show links to resources in log and frontend
+
+# Enables the frontend
+frontend:
+  extra_html_url:
+    - /local/custom_ui/state-card-tiles.html
+    - /local/custom_ui/state-card-custom-ui.html
+    - /local/custom_ui/custom-weather-card.html
+  extra_html_url_es5:
+    - /local/custom_ui/state-card-tiles_es5.html
+    - /local/custom_ui/state-card-custom-ui-es5.html
+    - /local/custom_ui/custom-weather-card.html
+  javascript_version: latest
+
+# Enables configuration UI
+config:
+
+http:
+  base_url: !secret base_url
+  api_password: !secret http_password
+  cors_allowed_origins:
+    - https://reformedreality.com
+    - http://reformedreality.com
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Weather prediction
+
+# Text to speech
+tts:
+  - platform: google
+    language: 'it'
+
+# Cloud
+cloud:
+
+logger:
+  logs:
+    camera.giardino: debug
+
+input_text:
+  cam_ptz:
+    name: mic
+  weather:
+    name: weather
+
+
+  ##############################    components   #########################################
+
+google_assistant:
+  project_id: galvanized-hall-199521
+  client_id: !secret google_client_id
+  access_token: !secret google_access_token
+  agent_user_id: !secret google_agent_user_id
+  api_key: !secret google_api_key
+  expose_by_default: false
+  entity_config:
+    switch.sonoff:
+      name: luce corrridoio
+      expose: true
+    switch.cancello:
+      name: cancello
+      expose: true
+    switch.irrigazione:
+      name: irrigazione
+      expose: true
+    media_player.sony_bravia_tv:
+      name: televisione
+      expose: true
+    switch.wol:
+      name: computer
+      expose: true
+    switch.alarm:
+      name: alarm
+      expose: true
+
+weather:
+  - platform: yweather
+    woeid: 710478
+
+netatmo:
+  api_key: !secret netatmo_api_key
+  secret_key: !secret netatmo_secret_key
+  username: !secret netatmo_username
+  password: !secret netatmo_password
+    
+climate:
+  - platform: netatmo
+  - platform: broadlink
+    name: Condizionatore
+    host: 192.168.1.57
+    mac: '34:ea:34:43:14:01'
+    ircodes_ini: 'ircodes/cond.ini'
+    min_temp: 17
+    max_temp: 23
+    target_temp: 20
+    temp_sensor: sensor.temperatura
+    default_operation: idle
+    default_fan_mode: mid
+    customize:
+      operations:
+        - idle
+        - cool
+        - auto
+      fan_modes:
+        - high
+        - auto
+
+media_player:
+  - platform: braviatv
+    host: 192.168.1.3
+
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+
+  - platform: cast
+    host: 192.168.1.7
+
+camera:
+  - platform: ffmpeg
+    ffmpeg_bin: /usr/bin/avconv
+    name: Cam
+    input: -rtsp_transport udp -i rtsp://admin:88888888@192.168.1.100:10554/udp/av0_0
+    extra_arguments: -pred 1 -q:v 2
+
+  - platform: ffmpeg
+    ffmpeg_bin: /usr/bin/avconv
+    name: Entrata
+    input: -rtsp_transport tcp -i rtsp://192.168.1.17/unicast
+
+notify:
+  - platform: joaoapps_join
+    device_id: 95459480664c416e8ea10abb7d5ef67a
+    name: s7
+    api_key: !secret join_api_key
+  - platform: nfandroidtv
+    name: sony_bravia
+    host: 192.168.1.3
+
+joaoapps_join:
+  - name: android
+    device_id: group.android
+    api_key: !secret join_api_key
+
+mqtt:
+  broker: 192.168.1.6
+  port: 1883
+  client_id: home-assistant-1
+  keepalive: 60
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  protocol: 3.1 
+
+device_tracker:
+  - platform: owntracks
+
+zone:
+  name: Casa
+  latitude: 45.8903545
+  longitude: 12.7016591
+  radius: 10
+
+microsoft_face:
+  api_key: !secret microsoft_api_key
+  azure_region: westcentralus
+
+image_processing:
+ - platform: microsoft_face_identify
+   group: family
+   confidence: 30
+   source:
+    - entity_id: camera.cam
+
+xiaomi_aqara:
+  discovery_retry: 5
+  gateways:
+    - key: x5ag24y2d7lmo3ki
+
+  ##############   switches   ####################################################
+
+switch:
+  - platform: command_line
+    switches:
+      irrigazione:
+        command_on: 'python /home/homeassistant/.homeassistant/scripts/irrig_on.py'
+        command_off: 'python /home/homeassistant/.homeassistant/scripts/irrig_off.py'
+
+  - platform: command_line
+    switches:
+      canc:
+        command_on: 'python /home/homeassistant/.homeassistant/scripts/canc.py'
+        command_off: 'python /home/homeassistant/.homeassistant/scripts/canc_off.py'
+
+  - platform: template
+    switches:
+      cancello:
+        value_template: '{{ states.binary_sensor.canc_censor.state }}'
+        turn_on: 
+          service: switch.turn_on
+          entity_id: switch.canc
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.canc
+
+  - platform: template
+    switches:
+      timer:
+        value_template: '{{ states.automation.irrigazione.state }}'
+        turn_on: 
+          service: automation.turn_on
+          entity_id: automation.irrigazione
+        turn_off:
+          service: automation.turn_off
+          entity_id: automation.irrigazione
+
+  - platform: template
+    switches:
+      face_rec:
+        value_template: '{{ states.automation.face_rec.state }}'
+        turn_on: 
+          service: automation.turn_on
+          entity_id: automation.face_rec
+        turn_off:
+          service: automation.turn_off
+          entity_id: automation.face_rec
+
+  - platform: wake_on_lan
+    mac_address: "D0-50-99-5D-13-60"
+    name: "WOL"
+    host: "192.168.1.4"
+
+  - platform: command_line
+    switches:
+      pc:
+        command_off: 'net rpc shutdown -I 192.168.1.4 -U Michele%michele'
+
+  - platform: template
+    switches:
+      copy:
+        value_template: '{{ states.switch.wol.state }}'
+        turn_on:
+          service: switch.turn_on
+          entity_id: switch.wol
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.pc
+
+  - platform: mqtt
+    name: "sonoff"
+    state_topic: "stat/sonoff/POWER"
+    command_topic: "cmnd/sonoff/POWER"
+    optimistic: false
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+
+  - platform: template
+    switches:
+      robot:
+        value_template: '{{ states.switch.robot1.state }}'
+        turn_on: 
+          service: script.turn_on
+          entity_id: script.robot
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.robot1
+
+  - platform: template
+    switches:
+      alarm:
+        value_template: '{{ states.alarm_control_panel.house.state }}'
+        turn_on: 
+          service: script.turn_on
+          entity_id: script.alarm_arm
+        turn_off:
+          service: switch.turn_on
+          entity_id: script.alarm_disarm
+
+  - platform: broadlink
+    host: 192.168.1.57
+    mac: '34:ea:34:43:14:01'
+    switches:
+      condizionatore:
+        command_on: 'JgC2AQABJ5QVExUTFBMWNhU3FjYWEhYRFjYWEhQUFBMUFBQUFBMWNhYSFBQUExY2FhIUOBQTFhIWEhQTFBQUFBQ4FRIUOBQUFBMWNhQUFAACkhYSFBQWEhUSFBQWERUTFhIUOBYRFhIUFBQTFRMWEhY2FhEWEhUTFRIWEhQUFBMUFBYSFBMWEhYSFTYWNhQUFBQVAAUjAAEmlRYSFBQVEhQ4FDgWNhYSFBMWNhYSFBMUFBQUFBMUFBQ4FBQVEhQUFjYUExU3FBQUFBUSFhIWEhQTFBQUOBQ4FhEUFBQ4FhIUAAKSFBQWERUTFBQUExUTFBQUExUTFBQUExU3FjYUFBYSFTYWNhYSFDgWNhY1FhIWEhQTFTcWEhYSFBMUOBQUFjYWERYABSMAASaVFBQWERYSFBQUExYSFhIWERQUFhIUExYSFBQWERQUFhIUExQUFBQUExYSFhIUExYSFBQVEhQUFhIUExY2FhIUOBYRFjYWEhYAApEUExYSFBQUExUTFhIUExQUFBQVEhYSFBMVExQUFBMVExQUFBMWEhYSFBMVExQUFhEVExYSFBMVExQUFDYWExQ4FgANBQAA'
+        command_off: 'JgC2AQABKZMWEhYRFhIWEhU2FjYWEhYSFjYWERQUFhEWEhYSFhEWNhYSFhIWERY2FhIWNhYRFhIWEhYRFhIWEhY2FhEWNhYSFhIVNhYSFgACkRYRFhIWEhYRFhIWEhYRFhIWNhYSFRIWEhYSFhEWEhY2FhEWEhYSFhEWEhQUFhEWEhYSFhEWEhYSFjYVNhYSFjYWAAUiAAEolBYRFhIWEhYRFjYUOBYSFhEWNhYSFhEWEhYSFhEWEhY2FhIWERYSFjYXERU2FhIWEhYRFhIWEhYRFhIWNhY2FhEXERY2FhIWAAKQFhIWEhYRFhIWEhYRFhIWEhYRFhIWEhY1FxEWNhY2FhIWNRcRFjYWNhY2FhEWEhYSFjUXERYSFhIWERY2FhIWNhYABSIAASiTFhIWEhYRFhIWEhYRFhIWERcRFhIWERcRFhIWERcRFhIWEhYRFhIWERYSFhIWERYSFhIWERYSFhIWERY2FhIWNhYSFjUXERYAApAXERYSFhIWERYSFhIWERYSFhIWERYSFhEXERYSFhIWERYSFhEXERYSFhEXERYSFhEWEhYSFhEXERYSFjYWERY2FgANBQAA'
+      robot1:
+        command_on: 'JgBIAAABKZMTEhITEhISExITEhISOBMSEjgTEhI3EhMSOBMTEDgSFBETEhQROBISEhQREhI4ExISOBM3ExISNxI4EzcSExI4EwANBQ=='
+        command_off: 'JgBIAAABJ5YQFBAVEBUPFRAVEBUPOhAVEDoQFRA6EBQQOhAVEDoQFRA6DxUQFRAVDzoQFRAVDxYQFQ86EDoQNhQVEDoPOhA7EAANBQ=='   
+      swing:
+        command_on: 'JgAkAQABKZIXNRYSFhEXNRc1FzUWNhYSFjUXERYSFhEXERYSFhEXERYSFhEXERYSFhEXNRcRFhIWERcRFhIWERc1FhIWNhYRFxEWNhYRFwACkBY2FhIWERcRFhIWERcRFhIWNRcRFhIWERcRFhIWERc1FxEWEhYRFxEWEhYRFxEWEhYRFxEWEhYRFxEWEhY1FzUXAAUiAAEokxYSFhEXERYSFhEXERYSFhEWEhYRFxEWEhYRFxEWEhYRFxEWEhYRFxEWEhYRFxEWEhYRFxEWEhYRFxEWNhYSFjUXERY2FhIWAAKQFxEWEhYRFxEWEhYRFxEWEhYRFhIWEhYRFxEWEhYRFxEWEhYRFxEWEhYRFxEWERcRFhIWERcRFhIWERc1FxEWNhYADQUAAAAA'
+        command_off: 'JgAkAQABKJMWEhYSFhEWNhY2FjYWERcRFhIWNhYRFxEWEhYRFxEWEhYRFxEWEhYRFhIWNhYSFhEWEhYRFxEWEhY2FhEXNRYSFhEXNRcRFgACkRYRFhIWEhYRFxEWEhYRFxEWNhYSFhEWEhYSFhEWEhY2FhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEWEhY2FjYWAAUiAAEpkhcRFhIWERcRFhIWERcRFhIWERcRFhIWERcRFhIWERcRFhIWERYSFhIWERYSFhIWERYSFhIWERYSFhIWNRcRFjYWEhY1FxEWAAKRFhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEXERYSFhEXERY2FhIWNRcADQUAAAAA'
+  ###################   sensors   #################################################
+
+binary_sensor:
+  - platform: rpi_gpio
+    ports:
+      25: canc_censor
+
+  - platform: ffmpeg_motion
+    input: -rtsp_transport udp -i rtsp://admin:88888888@192.168.1.100:10554/udp/av0_0
+    name: motion
+    ffmpeg_bin: /usr/bin/avconv
+    changes: 1
+    reset: 20
+
+      
+  #######################   input number   ####################################################
+
+input_number:
+  timerore:
+    name: ore
+    icon: mdi:timer
+    initial: 1
+    min: 1
+    max: 5
+    step: 1
+  
+  spotify_volume:
+    name: volume
+    icon: mdi:volume-high
+    min: 0
+    max: 1
+    step: 0.05
+
+input_datetime:
+  irrigazione:
+    name: Programma Irrigazione
+    has_date: false
+    has_time: true
+    initial: '05:00'
+  
+input_select:
+  spotify_playlist:
+    name: 'Playlist:'
+    options:
+      - Rock
+      - Great Female Voices
+      - Soft
+    icon: mdi:spotify
+  spotify_source:
+    name: 'Source:'
+    options:
+      - SoundBar
+      - TV
+      - Telefono
+    initial: SoundBar
+    icon: mdi:speaker-wireless
+
+shell_command:
+  cam_1: 'curl -k "http://192.168.1.100:14976/decoder_control.cgi?loginuse=admin&loginpas=88888888&command=31&onestep=0&sit=31&15212668502220.604391171455106&_=1521266850222"'
+  cam_2: 'curl -k "http://192.168.1.100:14976/decoder_control.cgi?loginuse=admin&loginpas=88888888&command=33&onestep=0&sit=33&15212701797520.8378223747733333&_=1521270179752"' 
+
+
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+sensor: !include sensors.yaml
+alarm_control_panel: !include alarm.yaml
+panel_custom: !include panel_custom.yaml
+
+

@@ -1,0 +1,118 @@
+  - alias: 'canc open'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.canc_censor
+        to: 'on'
+        for:
+          seconds: 1
+    action: 
+      service: notify.s7
+      data:
+        {"message":"Cancello aperto!","title":"Home Assistant","data":{"icon":"https://goo.gl/xeetdy", "vibration":"125,75,125,275,200,275,125,75,125,275,200,600,200,600"}}
+
+
+  - alias: 'corinne casa'
+    trigger:
+      - platform: zone
+        entity_id: device_tracker.corinne_corinne
+        zone: zone.casa
+        event: enter
+    action: 
+      service: notify.s7
+      data:
+        {"message":"Corinne è a casa!","title":"Home Assistant","data":{"icon":"https://goo.gl/xeetdy", "vibration":"500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500"}}
+
+       
+  - alias: 'irrigazione'
+    initial_state: 'off'
+    trigger: 
+      - platform: template
+        value_template: '{{ (states.input_datetime.irrigazione.attributes.timestamp | int | timestamp_custom("%H:%M", False)) == states.sensor.time.state }}'
+    condition: 
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+    action:
+      service: switch.turn_on
+      entity_id: switch.irrigazione
+
+  - alias: 'tempo irrigazione'
+    trigger: 
+      - platform: state
+        entity_id: switch.irrigazione
+        to: 'on'
+    condition:
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+    action:
+      service: script.turn_on
+      entity_id: script.tempo_irrig
+
+  - alias: 'Set Spotify Volume'
+    trigger:
+      - platform: state
+        entity_id: input_number.spotify_volume
+    action:
+      service: media_player.volume_set
+      data_template:
+        entity_id: media_player.spotify
+        volume_level: '{{  states.input_number.spotify_volume.state  }}'
+
+  - alias: 'tts_canc'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.canc_censor
+        to: 'on'
+    action: 
+      service: tts.google_say
+      entity_id: media_player.salotto
+      data:
+        message: 'il cancello è aperto'
+
+  - alias: 'face_rec'
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: image_processing.microsoftface_cam
+        to: 'unknown'
+    action:
+      service: tts.google_say
+      entity_id: media_player.salotto
+      data:
+        message: 'rilevato estraneo in casa, attivazione allarme'
+
+  - alias: 'alarm triggered'
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.house
+        to: 'triggered'
+    action:
+      service: notify.s7
+      data:
+        {"message":"Allarme Intruso!","title":"Home Assistant","data":{"icon":"https://goo.gl/xeetdy", "vibration":"500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500"}}
+
+  - alias: 'alarm warning'
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.house
+        to: 'warning'
+    action:
+      service: notify.s7
+      data:
+        {"message":"Attenzione intruso!","title":"Home Assistant","data":{"icon":"https://goo.gl/xeetdy", "vibration":"500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500"}}
+
+
+  

@@ -1,0 +1,94 @@
+light.cucina:
+  hidden: true
+light.soggiorno:
+  hidden: true
+light.cucina1:
+  hidden: true
+climate.termostato:
+  hidden: false
+light.hue_color_lamp_1:
+  friendly_name: Salotto
+switch.irrigazione:
+  friendly_name: Irrigazione manuale
+  icon: mdi:water-pump
+  assumed_state: false
+light.hue_color_lamp_2:
+  friendly_name: Cucina
+light.hue_color_lamp_3:
+  friendly_name: Scala
+input_datetime.irrigazione:
+  friendly_name: Programmazione orario
+switch.timer:
+  friendly_name: Programma orario On/Off
+input_number.timerore:
+  friendly_name: Timer (ore)
+group.luci: {}
+switch.cancello:
+  assumed_state: true
+media_player.htnt5_e7a5381_2: {}
+group.meteo1: {}
+media_player.htnt5_e7a5381: {}
+media_player.sony_bravia_tv: {}
+script.restart_ha:
+  icon: mdi:power
+sensor.corinne_batt:
+  icon: mdi:battery-outline
+sensor.michele_batt:
+  icon: mdi:battery-outline
+switch.copy:
+  friendly_name: PC
+  icon: mdi:desktop-classic
+sensor.sound_on:
+  icon: mdi:speaker
+sensor.tv_on:
+  icon: mdi:television
+script.spotify_music:
+  friendly_name: Musica
+  icon: mdi:play
+script.cam_1:
+  icon: mdi:camcorder
+script.cam_2:
+  icon: mdi:camcorder
+input_text.cam_ptz:
+  custom_ui_state_card: state-card-tiles
+  config:
+    columns: 2
+    row_height: 50px
+    column_width: 50px
+    gap: 15px
+    color_on: '#D5D619'
+    color_off: '#BBBEC2'
+    entities:
+    - entity: script.cam_1
+      label: POS 1
+      column: 1
+      row: 1
+      color: green
+    - entity: script.cam_2
+      label: POS 2
+      column: 2
+      row: 1
+input_text.weather:
+  config:
+    weather: weather.yweather
+  custom_ui_state_card: custom-weather-card
+  friendly_name: Meteo
+switch.condizionatore:
+  icon: mdi:air-conditioner
+switch.robot:
+  icon: mdi:roomba
+switch.sonoff:
+  friendly_name: corridoio
+  icon: mdi:lightbulb
+climate.condizionatore:
+  icon: mdi:air-conditioner
+sensor.face_rec:
+  icon: mdi:account-multiple
+sensor.face:
+  icon: mdi:face
+sensor.temperature_158d0002378f81:
+  friendly_name: Temperatura
+sensor.humidity_158d0002378f81:
+  friendly_name: Umidità
+light.gateway_light_7811dcb7d33a:
+  friendly_name: Gateway Light

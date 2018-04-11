@@ -1,0 +1,77 @@
+
+tempo_irrig:
+    alias: tempo irrig
+    sequence:
+      - delay: '{{ states.input_number.timerore.state | int }}:00:00'
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.irrigazione  
+
+restart_ha:  
+  alias: Restart HA
+  sequence:
+    - service: homeassistant.restart  
+
+cam_1:
+  alias: Vista 1
+  sequence:
+    - service: shell_command.cam_1
+
+cam_2:
+  alias: Vista 2
+  sequence:
+    - service: shell_command.cam_2
+
+spotify_music:
+  alias: Play selected spotify playlist
+  sequence:
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.spotify
+        volume_level: '0.40'
+    - service: media_player.select_source
+      data_template: 
+        entity_id: media_player.spotify
+        source: >
+          {% if is_state("input_select.spotify_source", "SoundBar") %} barra
+          {% elif is_state("input_select.spotify_source", "TV") %}  KD-49X8309C
+          {% elif is_state("input_select.spotify_source", "Telefono") %} SM-G935F
+          {% endif %}
+    - service: media_player.play_media
+      data_template:
+       entity_id: media_player.spotify
+       media_content_type: playlist
+       media_content_id: >
+        {% if is_state("input_select.spotify_playlist", "Rock") %} spotify:user:cinquemic:playlist:3JzUeyisWeqa1uU9Tf3Nro
+        {% elif is_state("input_select.spotify_playlist", "Great Female Voices") %} spotify:user:spotify:playlist:37i9dQZF1DX9loJQLuEvap
+        {% elif is_state("input_select.spotify_playlist", "Soft") %} spotify:user:cinquemic:playlist:0hbIGHoWQXeUYFOqTg5cTc
+        {% endif %}
+
+robot:
+  alias: robot
+  sequence:
+    - service: switch.turn_on
+      data:  
+        entity_id: switch.robot1
+    - delay:
+        seconds: 3
+    - service: switch.turn_on
+      data:
+        entity_id: switch.robot1
+
+alarm_arm:
+  sequence:
+    service: alarm_control_panel.alarm_arm_away
+    entity_id: alarm_control_panel.house
+alarm_disarm:
+  sequence:
+    service: alarm_control_panel.alarm_disarm
+    entity_id: alarm_control_panel.house
+    data:
+      code: 1234
+
+
+
+
+
+

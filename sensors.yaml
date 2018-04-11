@@ -1,0 +1,129 @@
+
+  - platform: template
+    sensors:
+      alarm_time:
+        friendly_name: 'Ora Impostata'
+        value_template: '{{ "%0.02d:%0.02d" | format(states("input_number.alarmhour") | int, states("input_number.alarmminutes") | int) }}'
+
+  - platform: time_date
+    display_options:
+      - 'time'
+
+  - platform: google_geocode
+    name: Michele
+    origin: device_tracker.michele_michele
+    options: street, street_number, city
+    gravatar: cinquemic@gmail.com
+    api_key: AIzaSyBLZto4-ZGWYNgJu0F0HUSIJBH9Urupjyw
+
+  - platform: google_geocode
+    name: Corinne
+    origin: device_tracker.corinne_corinne
+    options: street, street_number, city
+    api_key: AIzaSyBLZto4-ZGWYNgJu0F0HUSIJBH9Urupjyw
+
+  - platform: google_travel_time
+    name: ETA Michele
+    api_key: AIzaSyBLZto4-ZGWYNgJu0F0HUSIJBH9Urupjyw
+    origin: device_tracker.michele_michele
+    destination: zone.home
+
+  - platform: google_travel_time
+    name: ETA Corinne
+    api_key: AIzaSyBLZto4-ZGWYNgJu0F0HUSIJBH9Urupjyw
+    origin: device_tracker.corinne_corinne
+    destination: zone.home
+
+  - platform: template
+    sensors:
+      temperatura:
+        unit_of_measurement: '°C'
+        value_template: '{{ states.climate.termostato.attributes.current_temperature}}'
+        entity_id:
+          - climate.termostato
+
+  - platform: template
+    sensors:
+      corinne_batt:
+        friendly_name: Batteria Corinne
+        value_template: '{{ states.device_tracker.corinne_corinne.attributes.battery}}'
+        unit_of_measurement: '%'
+
+  - platform: template
+    sensors:
+      michele_batt:
+        friendly_name: Batteria Michele
+        value_template: '{{ states.device_tracker.michele_michele.attributes.battery}}'
+        unit_of_measurement: '%'
+
+  - platform: template
+    sensors:
+      face:
+        friendly_name: Total faces
+        value_template: '{{ states.image_processing.microsoftface_cam.attributes.total_faces }}'
+
+  - platform: template
+    sensors:
+      face_info:
+        friendly_name: Info
+        value_template: '{{ states.image_processing.microsoftface_cam.attributes.faces }}'
+
+  - platform: template
+    sensors:
+      face_rec:
+        friendly_name: Person
+        value_template: '{{ states.image_processing.microsoftface_cam.state }}'
+
+  - platform: template
+    sensors:
+      pc_on:
+        friendly_name: PC
+        value_template: '{{ states.switch.wol.state }}'
+
+  - platform: command_line
+    name: Raspberry Temp
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) | round(2) }}'
+
+  - platform: template
+    sensors:
+      tv_on:
+        value_template: "{% if states.media_player.sony_bravia_tv.state == 'off' %}Spenta{%else %}Accesa{% endif %}"
+        friendly_name: 'Sony TV'
+
+  - platform: template
+    sensors:
+      sound_on:
+        value_template: "{% if states.media_player.htnt5_e7a5381.state == 'off' %}Spenta{%else %}Accesa{% endif %}"
+        friendly_name: 'Sony Soundbar'
+
+  - platform: speedtest
+    minute: 30
+    hour:
+      - 0
+      - 6
+      - 12
+      - 18
+    monitored_conditions:
+      - ping
+      - download
+      - upload
+
+  - platform: netatmo
+    modules:
+      La mia stanza:
+        - temperature
+
+  - platform: cert_expiry
+    host: cinquemic.ddns.net
+
+  - platform: pi_hole
+    monitored_conditions:
+      - ads_blocked_today
+      - domains_being_blocked
+      - unique_clients
+     
+      
+
+  

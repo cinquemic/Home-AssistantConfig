@@ -1,0 +1,45 @@
+packet:
+- >
+  {% set room=trigger.topic.split('/')[0] %}
+  {% set temperature=states.climate[room].attributes.temperature | round %}
+  {% set swing=states.climate[room].attributes.swing_mode %}
+  {% set fan=states.climate[room].attributes.fan_mode %}
+  {{
+    {"high": {
+      18: {
+        "on": "JgDWA...==",
+        "off": "JgDWA...=="
+      }
+    },
+    "medium": {
+      18: {
+        "on": "JgDWA...==",
+        "off": "JgDWA...=="
+      }
+    },
+    "low": {
+      18: {
+        "on": "JgDWA...==",
+        "off": "JgDWA...=="
+      }
+    },
+    "high": {
+      19: {
+        "on": "JgDWA...==",
+        "off": "JgDWA...=="
+      }
+    },
+    "medium": {
+      19: {
+        "on": "JgDWA...==",
+        "off": "JgDWA...=="
+      }
+    },
+    "low": {
+      19: {
+        "on": "JgDWA...==",
+        "off": "JgDWA...=="
+      }
+    }
+    }[fan][temperature][swing]
+  }}

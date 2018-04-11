@@ -1,0 +1,15 @@
+auth_cookie
+ircc_command_list
+tv_challenge
+mac
+secrets.yaml
+known_devices.yaml
+!/.gitignore
+config
+*.py
+home-assistant.log
+home-assistant_v2.db
+*.db-journal
+lib
+deps
+tts
