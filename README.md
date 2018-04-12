@@ -20,13 +20,18 @@ This is my Home Assistant configuration, running on Raspberry Pi3 B.
 - Sony Soundbar 
 - Broadlink RM Pro
 
+Garden irrigation with an electric valve connected to a relay board on Rpi GPiO, with an automation to start irrigation at a specific time.
+
 ## Presence Detection
 
 OwnTracks connected to MQTT broker.
 
 ## Alarm Panel
 
-![alt text](screenshots/alarm.png "Alarm")
 ![alt text](screenshots/alarm1.png "Alarm_armed")
 
-Alarm Panel from gazoscalvertos https://github.com/gazoscalvertos/Hass-Custom-Alarm with Microsoft Face presence detection.
+Alarm Panel from gazoscalvertos https://github.com/gazoscalvertos/Hass-Custom-Alarm with Microsoft Face presence detection and Xiaomi motion sensor.
+
+
+
+
