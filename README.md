@@ -29,4 +29,4 @@ OwnTracks connected to MQTT broker.
 ![alt text](screenshots/alarm.png "Alarm")
 ![alt text](screenshots/alarm1.png "Alarm_armed")
 
-Alarm Panel from gazoscalvertos https://github.com/gazoscalvertos/Hass-Custom-Alarm
+Alarm Panel from gazoscalvertos https://github.com/gazoscalvertos/Hass-Custom-Alarm with Microsoft Face presence detection.
