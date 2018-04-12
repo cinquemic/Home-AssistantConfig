@@ -19,3 +19,11 @@ This is my Home Assistant configuration, running on Raspberry Pi3 B.
 - Sony Android TV KD-49X8309C
 - Sony Soundbar 
 - Broadlink RM Pro
+
+## Presence Detection
+
+OwnTracks connected to MQTT broker.
+
+## Alarm Panel
+
+
